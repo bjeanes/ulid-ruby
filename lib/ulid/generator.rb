@@ -11,8 +11,7 @@ module ULID
     MASK = 0x1f
 
     def generate(time = Time.now)
-      input = octo_word(time)
-
+      input = generate_bytes(time)
       encode(input, ENCODED_LENGTH)
     end
 
@@ -20,9 +19,8 @@ module ULID
       time_48bit(time) + random_bytes
     end
 
-    private
-
-    def encode(n, length)
+    def encode(bytes, length = ENCODED_LENGTH)
+      n = octo_word(bytes)
       e = '0' * length
       i = length - 1
 
@@ -35,8 +33,10 @@ module ULID
       e
     end
 
-    def octo_word(time = Time.now)
-      (hi, lo) = generate_bytes(time).unpack('Q>Q>')
+    private
+
+    def octo_word(bytes)
+      (hi, lo) = bytes.unpack('Q>Q>')
       (hi << 64) | lo
     end
 

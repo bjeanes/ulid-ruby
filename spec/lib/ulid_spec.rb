@@ -35,6 +35,14 @@ describe ULID do
         assert_equal '01ARYZ6S41', ulid[0...10]
       end
     end
+
+    it 'encodes provided bytes' do
+      random_bytes = Sysrandom.random_bytes(ULID::Generator::RANDOM_BYTES)
+      ULID.stubs(:random_bytes).returns(random_bytes)
+      ulid = ULID.generate(Time.at(1_469_918_176.385))
+      bytes = ULID.generate_bytes(Time.at(1_469_918_176.385))
+      assert_equal ulid, ULID.encode(bytes)
+    end
   end
 
   describe 'underlying binary' do
