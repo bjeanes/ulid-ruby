@@ -63,4 +63,12 @@ describe ULID do
       assert bytes[6..-1] == random_bytes
     end
   end
+
+  describe 'decoding ULID string' do
+    it 'decodes to underlying bytes' do
+      bytes = ULID.generate_bytes
+      ulid = ULID.encode(bytes)
+      assert_equal bytes, ULID.decode(ulid)
+    end
+  end
 end
